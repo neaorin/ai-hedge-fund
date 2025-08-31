@@ -101,7 +101,7 @@
   },
   {
     "display_name": "Azure Open AI Deployment",
-    "model_name": "",
+    "model_name": "Azure OpenAI",
     "provider": "Azure OpenAI"
   }
 ]
