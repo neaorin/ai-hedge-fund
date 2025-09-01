@@ -3,18 +3,23 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
-# Get the backend directory path
+# Load environment variables from .env file in project root
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
+# Get database URL from environment variable, with fallback to default
 BACKEND_DIR = Path(__file__).parent.parent
-DATABASE_PATH = BACKEND_DIR / "hedge_fund.db"
+DEFAULT_DATABASE_PATH = BACKEND_DIR / "hedge_fund.db"
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_DATABASE_PATH}")
 
-# Database configuration - use absolute path
-DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
+connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
 
 # Create SQLAlchemy engine
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False}  # Needed for SQLite
+    connect_args=connect_args
 )
 
 # Create SessionLocal class
